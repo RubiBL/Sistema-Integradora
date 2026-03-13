@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <h1 class="gradient-text">Hola, {{ user.name }}</h1>
+    <p style="color: var(--text-muted);">{{ user.email }}</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <!-- Info Vehiculo -->
+    <div class="card">
+        <h3>Tu Vehículo</h3>
+        {% if vehicle %}
+            <p><strong>Placa:</strong> {{ vehicle.plate }}</p>
+            <p><strong>Modelo:</strong> {{ vehicle.model }}</p>
+            <p><strong>Color:</strong> {{ vehicle.color }}</p>
+        {% else %}
+            <p>No hay vehículo registrado.</p>
+        {% endif %}
+    </div>
+
+    <!-- Generar QR -->
+    <div class="card" style="text-align: center;">
+        <h3>Acceso Hoy</h3>
+        <p style="font-size: 2rem; font-weight: bold;">{{ codes_today }} / 2</p>
+        <p style="margin-bottom: 1rem; font-size: 0.8rem; color: var(--text-muted);">Usos permitidos por día</p>
+        
+        <button id="generateBtn" class="btn btn-primary" onclick="generateQR()">Generar QR de Acceso</button>
+        
+        <div id="qrContainer" style="margin-top: 1.5rem; display: none;">
+            <img id="qrImg" src="" style="width: 200px; border-radius: 1rem; padding: 10px; background: white;">
+            <p style="margin-top: 0.5rem; color: var(--warning);">Válido por 24 horas</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Tus Registros Recientes</h3>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha y Hora</th>
+                    <th>Tipo</th>
+                    <th>Token de Acceso</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.timestamp }}</td>
+                    <td><span class="status-{{ log.type | lower }}">{{ log.type }}</span></td>
+                    <td style="font-family: monospace; font-size: 0.8rem;">{{ log.token }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+async function generateQR() {
+    const btn = document.getElementById('generateBtn');
+    try {
+        const response = await fetch('/generate_qr/{{ user.id }}', { method: 'POST' });
+        const data = await response.json();
+        
+        if (response.ok) {
+            document.getElementById('qrImg').src = `/qr_image/${data.token}`;
+            document.getElementById('qrContainer').style.display = 'block';
+            btn.style.display = 'none';
+        } else {
+            alert(data.error);
+        }
+    } catch (e) {
+        alert("Error al generar el código");
+    }
+}
+</script>
+{% endblock %}

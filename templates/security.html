@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <h1 class="gradient-text">Escáner de Seguridad</h1>
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">Acerque el código QR a la cámara o use el lector USB.</p>
+
+    <div id="reader"></div>
+
+    <div style="margin-top: 2rem;">
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Entrada manual / Lector USB:</p>
+        <input type="text" id="usbInput" placeholder="Enfoque aquí para usar lector USB" autocomplete="off">
+    </div>
+</div>
+
+<div id="resultCard" class="card qr-result-card">
+    <h2 id="resultStatus" style="font-size: 1.5rem;"></h2>
+    <div style="text-align: left; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 1rem; display: inline-block; min-width: 300px;">
+        <p><strong>Usuario:</strong> <span id="resUser"></span></p>
+        <p><strong>Vehículo:</strong> <span id="resModel"></span></p>
+        <p><strong>Placa:</strong> <span id="resPlate" style="color: var(--primary); font-weight: bold;"></span></p>
+    </div>
+    <div style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="resetScanner()">Aceptar / Siguiente</button>
+    </div>
+</div>
+
+<!-- Lector QR JS -->
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+const html5QrCode = new Html5Qrcode("reader");
+const resultCard = document.getElementById('resultCard');
+const usbInput = document.getElementById('usbInput');
+
+function onScanSuccess(decodedText, decodedResult) {
+    handleScan(decodedText);
+}
+
+const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
+
+// USB Input Handling
+usbInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        handleScan(this.value);
+        this.value = '';
+    }
+});
+
+async function handleScan(token) {
+    try {
+        const response = await fetch('/scan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token })
+        });
+        const data = await response.json();
+        
+        if (response.ok) {
+            showResult(data);
+        } else {
+            alert("ERROR: " + data.error);
+        }
+    } catch (e) {
+        alert("Error de conexión con el servidor");
+    }
+}
+
+function showResult(data) {
+    document.getElementById('resultStatus').innerText = data.status;
+    document.getElementById('resUser').innerText = data.user;
+    document.getElementById('resModel').innerText = data.model;
+    document.getElementById('resPlate').innerText = data.plate;
+    
+    resultCard.style.display = 'block';
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+function resetScanner() {
+    resultCard.style.display = 'none';
+    usbInput.focus();
+}
+</script>
+{% endblock %}

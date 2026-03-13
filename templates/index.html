@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="text-align: center; max-width: 600px; margin: 10rem auto;">
+    <h1 class="gradient-text">Sistema de Estacionamiento</h1>
+    <p style="margin-bottom: 2rem; color: var(--text-muted);">Bienvenido al sistema inteligente de gestión de accesos.</p>
+    
+    <div style="display: grid; gap: 1rem;">
+        <a href="/user/1" class="btn btn-primary">Entrar como Usuario (Prueba)</a>
+        <a href="/security" class="btn btn-primary" style="background: var(--success);">Entrar como Seguridad</a>
+        <a href="/admin" class="btn btn-primary" style="background: var(--warning);">Entrar como Administrador</a>
+    </div>
+</div>
+{% endblock %}

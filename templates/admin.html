@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <h1 class="gradient-text">Panel de Administración</h1>
+    <p style="color: var(--text-muted);">Reporte general de accesos (Entradas y Salidas).</p>
+</div>
+
+<div class="card">
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Vehículo</th>
+                    <th>Placa</th>
+                    <th>Acción</th>
+                    <th>Fecha y Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td style="font-weight: 600;">{{ report.name }}</td>
+                    <td>{{ report.model }}</td>
+                    <td><span style="background: rgba(99, 102, 241, 0.2); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--primary);">{{ report.plate }}</span></td>
+                    <td><span class="status-{{ report.type | lower }}">{{ report.type }}</span></td>
+                    <td style="color: var(--text-muted); font-size: 0.85rem;">{{ report.timestamp }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="text-align: center;">
+    <a href="/" class="btn btn-primary" style="background: var(--card-bg);">Volver al Inicio</a>
+</div>
+{% endblock %}
