@@ -40,6 +40,12 @@ window.addEventListener('load', async () => {
             const config = { fps: 20, qrbox: { width: 250, height: 250 } };
             html5QrCode.start(devices[0].id, config, onScanSuccess);
         }
+        if (devices.length > 1) {
+            console.warn("Se detectaron múltiples cámaras. Actualmente se está usando la primera disponible.");
+        }
+        if (devices.length === 0) {
+            document.getElementById('errorMsg').style.display = 'block';
+        }
     } catch (err) {
         document.getElementById('errorMsg').style.display = 'block';
     }
