@@ -4,3 +4,6 @@ pillow
 cryptography
 requests
 pytest
+opencv-python
+pyzbar
+pyserial
