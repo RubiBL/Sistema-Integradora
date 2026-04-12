@@ -90,6 +90,8 @@ def user_dashboard(user_id):
 
 @app.route('/generate_qr/<int:user_id>', methods=['POST'])
 def generate_qr(user_id):
+    if 'user_id' not in session or session['user_id'] != user_id:
+        return jsonify({'error': 'No autorizado'}), 403
     conn = get_db_connection()
     
     # 1. Verificar límite diario
@@ -132,6 +134,8 @@ def qr_image(token):
 # --- SECURITY ROUTES ---
 @app.route('/security')
 def security_dashboard():
+    if 'role' not in session or session['role'] != 'seguridad':
+        return redirect(url_for('index'))
     return render_template('security.html')
 @app.route('/scan', methods=['POST'])
 def scan_qr():
@@ -215,6 +219,8 @@ def scan_qr():
 # --- ADMIN ROUTES ---
 @app.route('/admin')
 def admin_dashboard():
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('index'))
     conn = get_db_connection()
     # Join everything for the final report
     reports = conn.execute('''
