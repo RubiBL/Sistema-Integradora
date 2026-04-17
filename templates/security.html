@@ -18,6 +18,8 @@
         <h2 id="toastTitle" style="color: #2f855a; margin-top: 0;"></h2>
         <div style="text-align: left; font-size: 0.9rem; color: #333;">
             <p><strong>Usuario:</strong> <span id="toastUser"></span></p>
+            <p><strong>Marca:</strong> <span id="toastBrand" style="font-weight: bold; color: var(--primary);"></span></p>
+            <p><strong>Modelo:</strong> <span id="toastModel" style="font-weight: bold; color: var(--primary);"></span></p>
             <p><strong>Placa:</strong> <span id="toastPlate" style="font-weight: bold; color: var(--primary);"></span></p>
         </div>
     </div>
@@ -98,6 +100,8 @@ function showToast(data) {
 
     title.innerText = data.status;
     document.getElementById('toastUser').innerText = data.user;
+    document.getElementById('toastBrand').innerText = data.brand || 'N/A';
+    document.getElementById('toastModel').innerText = data.model || 'N/A';
     document.getElementById('toastPlate').innerText = data.plate;
     
     toast.style.display = 'block';

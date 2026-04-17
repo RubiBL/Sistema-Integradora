@@ -14,9 +14,8 @@
         <h3>Tu Vehículo</h3>
         {% if vehicle %}
             <p><strong>Placa:</strong> <span style="color: var(--primary);">{{ vehicle.plate }}</span></p>
+            <p><strong>Marca:</strong> {{ vehicle.brand }}</p>
             <p><strong>Modelo:</strong> {{ vehicle.model }}</p>
-            <p><strong>Tipo:</strong> {{ vehicle.type }}</p>
-            <p><strong>Año:</strong> {{ vehicle.year }}</p>
         {% else %}
             <p style="color: var(--warning);">No hay vehículo registrado para este usuario.</p>
         {% endif %}

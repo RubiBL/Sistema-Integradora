@@ -27,9 +27,8 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
             plate TEXT UNIQUE NOT NULL,
-            type TEXT,
-            model TEXT,
-            year INTEGER,
+            brand TEXT NOT NULL,
+            model TEXT NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users (id)
         )
     ''')
@@ -62,18 +61,18 @@ def init_db():
         (1, 'Estudiante Juan', 'alumno@u.edu', 'pass123', 'alumno'),
         (2, 'Profe Maria', 'maestra@u.edu', 'profe456', 'maestro'),
         (3, 'Admin Sistema', 'admin@u.edu', 'root789', 'admin'),
-        (4, 'Guardia Pedro', 'seguridad@u.edu', 'vigila000', 'seguridad')
+        (4, 'Plumilla', 'seguridad@u.edu', 'Pluma000', 'seguridad')
     ]
     
     # Registramos vehículos solo para los usuarios que los necesitan (alumno, maestro, admin)
     vehicles_data = [
-        (1, 'ABC123', 'Sedan', 'Toyota Corolla', 2022),
-        (2, 'XYZ789', 'SUV', 'Honda CR-V', 2020),
-        (3, 'LMN456', 'Hatchback', 'Mazda 3', 2023)
+        (1, 'ABC123', 'Toyota', 'Corolla'),
+        (2, 'XYZ789', 'Honda', 'CR-V'),
+        (3, 'LMN456', 'Mazda', '3')
     ]
 
     cursor.executemany('INSERT INTO users VALUES (?,?,?,?,?)', users_data)
-    cursor.executemany('INSERT INTO vehicles (user_id, plate, type, model, year) VALUES (?,?,?,?,?)', vehicles_data)
+    cursor.executemany('INSERT INTO vehicles (user_id, plate, brand, model) VALUES (?,?,?,?)', vehicles_data)
 
     conn.commit()
     conn.close()

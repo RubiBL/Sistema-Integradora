@@ -168,7 +168,7 @@ def scan_qr():
     
     query = '''
         SELECT q.id as qr_id, q.created_at, q.user_id, 
-               u.name, v.plate, v.model
+               u.name, v.plate, v.brand, v.model
         FROM qr_codes q
         JOIN users u ON q.user_id = u.id
         JOIN vehicles v ON u.id = v.user_id
@@ -214,6 +214,7 @@ def scan_qr():
         'is_error': is_error,
         'user': qr_data['name'],
         'plate': qr_data['plate'],
+        'brand': qr_data['brand'],
         'model': qr_data['model']
     })
 # --- ADMIN ROUTES ---
@@ -224,7 +225,7 @@ def admin_dashboard():
     conn = get_db_connection()
     # Join everything for the final report
     reports = conn.execute('''
-        SELECT u.name, v.plate, v.model, al.type, al.timestamp
+        SELECT u.name, v.plate, v.brand, v.model, al.type, al.timestamp
         FROM access_logs al
         JOIN qr_codes q ON al.qr_id = q.id
         JOIN users u ON q.user_id = u.id

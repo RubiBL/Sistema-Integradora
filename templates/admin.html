@@ -16,23 +16,18 @@
             <thead>
                 <tr>
                     <th>Usuario</th>
-                    <th>Vehículo</th>
-                    <th>Placa</th>
-                    <th>Acción</th>
-                    <th>Fecha y Hora</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for report in reports %}
-                <tr>
-                    <td style="font-weight: 600;">{{ report.name }}</td>
-                    <td>{{ report.model }}</td>
-                    <td>
-                        <span style="background: rgba(99, 102, 241, 0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--primary); color: var(--primary); font-weight: bold;">
-                            {{ report.plate }}
-                        </span>
-                    </td>
-                    <td>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Placa</th>
+                        <th>Acción</th>
+                        <th>Fecha y Hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ report.name }}</td>
+                        <td>{{ report.brand }}</td>
                         <span class="status-{{ report.type | lower }}" style="padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">
                             {{ report.type }}
                         </span>
